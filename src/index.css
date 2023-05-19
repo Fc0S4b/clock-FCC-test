@@ -1,13 +1,218 @@
-body {
+:root{
+  --clr-light: #fbfef9;
+  --clr-dark: #000004;
+  --clr-bg-timer-ligth: #a63446;
+  --clr-bg-timer-dark: #7e19469a;
+  --clr-border-timer:#0C6291;
+
+  --clr-bg-container:background: rgb(3, 28, 41);
+    background: radial-gradient(circle, rgba(3, 28, 41, 1) 0%, rgba(32, 6, 18, 1) 31%, rgba(32, 6, 18, 1) 63%, rgba(32, 6, 18, 1) 92%, rgba(44, 9, 27, 1) 100%);
+
+  /* Lapis Lazuli shades */
+  --clr-border-timer-20: #D4EDFB;
+  --clr-border-timer-30: #AEDEF8;
+  --clr-border-timer-40: hwb(202 59% 0%);
+  --clr-border-timer-50: #63BFF2;
+  --clr-border-timer-100: #50B8F0;
+  --clr-border-timer-200: #2AA8ED;
+  --clr-border-timer-300: #1295DC;
+  --clr-border-timer-400: #0F7BB7;
+  --clr-border-timer-500: #0C6291;
+  --clr-border-timer-600: #083F5D;
+  --clr-border-timer-700: #031C29;
+  --clr-border-timer-800: #000000;
+  --clr-border-timer-900: #000000;
+  --clr-border-timer-950: #000000;
+}
+
+*{
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #57D3DA;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color:var(--clr-bg-container);
+}
+
+
+
+.clock-wrapper{
+  max-width: 690px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  text-align: center;
+}
+button{
+  background-color:#166064;
+  cursor: pointer;
+  border: none;
+  color: var(--clr-border-timer-50);
+  border-radius: 50%;
+  background-color: #200612;
+    box-shadow:-10px -5px 43px var(--clr-bg-timer-dark),
+      inset -10px -5px 43px var(--clr-bg-timer-dark),
+      inset 20px 15px 43px rgba(6, 8, 11, 0.88);
+  
+}
+button:hover{
+  color:var(--clr-light);
+  box-shadow:
+      inset -10px -5px 43px var(--clr-bg-timer-dark),
+      inset 20px 15px 43px rgba(62, 73, 89, 0.509);
+}
+
+.timer-conf{
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #200612;
+  box-shadow: 
+      inset -10px -15px 23px var(--clr-bg-timer-dark),
+      inset 10px 15px 23px rgba(6, 8, 11, 0.88);
+}
+
+.timer-conf .inner{
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-content: center;
+  box-shadow: 4px 4px 10px rgba(9, 16, 27, 0.977), -4px -4px 11px var(--clr-bg-timer-dark);
+}
+
+
+
+.timer-conf-title{
+  font-size: 14px;
+}
+
+.btn-container{
+  margin: 0 auto;
+}
+
+.timer-conf-value{
+  font-size: 40px;
+  font-weight: 300;
+}
+
+.timer-conf-btn{
+  font-size: 14px;
+  font-weight: 900;
+  height: 25px;
+  width: 25px;
+}
+
+.display{
+  margin-bottom: -10px;
+}
+
+.timer-ctrl-btn {
+  margin: 1px;
+  height: 30px;
+  width: 30px;
+  position: relative;
+}
+.timer-ctrl{
+  z-index: 11;
+}
+.title-ctrl{
+  display: block;
+  margin-bottom: 5px;
+  font-size: 18px;
+ 
+}
+.timer-ctrl-btn i{
+  font-size: 14px;
+  
+}
+.timer-conf-btn.inc, .play{
+  margin-right: 5px;
+}
+
+
+.display-wrapper{
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: inset 5px 5px 25px rgba(0,0,0,0.25);
+  border-radius: 50%;
+  padding: 120px;
+  box-shadow: inset 4px 4px 10px rgba(9, 16, 27, 0.977), -3px -1px 20px var(--clr-bg-timer-dark);
+  
+}
+.dot{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index:10;
+}
+
+.dot::before{
+  content:'';
+  position: absolute;
+  top:0;
+  left:45%;
+  transform: translateX(-45%, -50%);
+  width: 20px;
+  height: 20px;
+  background: var(--clr-light);
+  border-radius: 50%;
+  box-shadow: -5px 0 20px var(--clr-light), -4px 0 40px var(--clr-light), -3px 0 60px var(--clr-light), -2px 0 80px var(--clr-light),
+    0 0 100px var(--clr-light);
+}
+
+
+.display-wrapper svg{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: rotate(270deg);
+}
+
+.display-wrapper svg circle{
+  
+  width: 100%;
+  height: 100%;
+  fill: transparent;
+  stroke-width:13;
+  stroke: var(--clr-border-timer-40);
+  transform: translate(8px,8px);
+  stroke-dasharray:692;
+  /* change this dinamically 2pir=692, r=110*/
+  stroke-dashoffset: 692;
+  
+}
+
+#timer-label h2{
+  font-size: 18px;
+}
+
+#time-left{
+  font-size: 50px;
 }
