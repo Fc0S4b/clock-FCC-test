@@ -2,7 +2,7 @@ import fillTimer from '../utils/animatedBar';
 
 const TimerControls = ({ play, reset }) => {
   const controlTime = () => {
-    fillTimer();
+    fillTimer(60, 50);
   };
 
   return (

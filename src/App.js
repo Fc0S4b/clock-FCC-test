@@ -4,10 +4,16 @@ import Display from './components/Display';
 import { useState } from 'react';
 
 function App() {
-  const [breakLength, setbreakLength] = useState('5:00');
-  const [sessionLength, setSessionLength] = useState('25:00');
-  const [sessionTime, setSessionTime] = useState('25:00');
+  const [breakLength, setbreakLength] = useState(5 * 60);
+  const [sessionLength, setSessionLength] = useState(25 * 60);
+  const [sessionTime, setSessionTime] = useState(25 * 60);
   const [play, setPlay] = useState(true);
+
+  const formatTime = (time) => {
+    let min = Math.floor(time / 60);
+    let sc = time % 60;
+    return (min < 10 ? '0' + min : min) + ':' + (sc < 10 ? '0' + sc : sc);
+  };
 
   return (
     <div className="container">
@@ -18,14 +24,14 @@ function App() {
           idIncrement={'break-increment'}
           idLength={'break-length'}
           configType={'Break Length'}
-          timeLength={breakLength}
+          timeLength={formatTime(breakLength)}
         />
         <div className="display-wrapper">
           <div className="dot"></div>
           <svg>
             <circle cx="110" cy="110" r="110" id="circle-svg"></circle>
           </svg>
-          <Display sessionTime={sessionTime} />
+          <Display sessionTime={formatTime(sessionTime)} />
           <TimerControls play={play} />
         </div>
         <TimerConf
@@ -34,7 +40,7 @@ function App() {
           idIncrement={'session-increment'}
           idLength={'session-length'}
           configType={'Session Length'}
-          timeLength={sessionLength}
+          timeLength={formatTime(sessionLength)}
         />
         {/* <audio id="beep"></audio> */}
       </div>
