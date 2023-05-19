@@ -2,14 +2,15 @@ import TimerConf from './components/TimerConf';
 import TimerControls from './components/TimerControls';
 import Display from './components/Display';
 import formatTime from './utils/formatTime';
-import { useState } from 'react';
+import fillTimer from './utils/animatedBar';
+import { useState, useEffect } from 'react';
 
 function App() {
   const [breakLength, setBreakLength] = useState(5);
-  const [sessionLength, setSessionLength] = useState(25);
-  const [sessionTime, setSessionTime] = useState(25 * 60);
+  const [sessionLength, setSessionLength] = useState(1);
+  const [sessionTime, setSessionTime] = useState(1 * 60);
   const [timeOn, setTimeOn] = useState(false);
-  const [play, setPlay] = useState(true);
+  const [play, setPlay] = useState(false);
 
   const confBtn = (seconds, type) => {
     if (type === 'break') {
@@ -39,8 +40,27 @@ function App() {
     setSessionLength(25);
     setSessionTime(25 * 60);
     setTimeOn(false);
-    // setPlay
+    setPlay(false);
   };
+
+  const countDown = () => {
+    setTimeOn(!timeOn);
+    setPlay(!play);
+  };
+
+  useEffect(() => {
+    let timeoutId;
+
+    if (timeOn && sessionTime > 0) {
+      timeoutId = setTimeout(() => {
+        setSessionTime((prevTime) => prevTime - 1);
+        fillTimer(sessionLength, sessionTime);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timeoutId);
+    };
+  }, [timeOn, sessionTime]);
 
   return (
     <div className="container">
@@ -61,7 +81,7 @@ function App() {
             <circle cx="110" cy="110" r="110" id="circle-svg"></circle>
           </svg>
           <Display sessionTime={formatTime(sessionTime)} />
-          <TimerControls play={play} reset={reset} />
+          <TimerControls countDown={countDown} play={play} reset={reset} />
         </div>
         <TimerConf
           id={'session-label'}
