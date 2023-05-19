@@ -5,6 +5,8 @@ const TimerConf = ({
   idLength,
   configType,
   timeLength,
+  type,
+  confBtn,
 }) => {
   return (
     <div id={id} className="timer-conf">
@@ -13,10 +15,18 @@ const TimerConf = ({
           {timeLength}
         </span>
         <div className="btn-container">
-          <button id={idIncrement} className="timer-conf-btn inc">
+          <button
+            id={idIncrement}
+            className="timer-conf-btn inc"
+            onClick={() => confBtn(1, type)}
+          >
             +
           </button>
-          <button id={idDecrement} className="timer-conf-btn dec">
+          <button
+            id={idDecrement}
+            className="timer-conf-btn dec"
+            onClick={() => confBtn(-1, type)}
+          >
             -
           </button>
         </div>

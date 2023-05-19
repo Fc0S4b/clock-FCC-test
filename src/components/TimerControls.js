@@ -20,7 +20,11 @@ const TimerControls = ({ play, reset }) => {
             <i className="material-icons">pause</i>
           )}
         </button>
-        <button id="reset" className="timer-ctrl-btn reset">
+        <button
+          id="reset"
+          className="timer-ctrl-btn reset"
+          onClick={() => reset()}
+        >
           <i className="material-icons">loop</i>
         </button>
       </div>
