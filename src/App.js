@@ -53,6 +53,7 @@ function App() {
     setAudioOn(false);
     audioRef.current.currentTime = 0;
     audioRef.current.pause();
+    fillTimer(25, 25 * 60);
   };
 
   const countDown = () => {
