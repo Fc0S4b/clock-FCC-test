@@ -20,26 +20,25 @@ function App() {
     if (timeOn) {
       return;
     }
-    {
-      if (type === 'break') {
-        if (
-          (breakLength <= 1 && seconds < 0) ||
-          (breakLength >= 60 && seconds > 0)
-        ) {
-          return;
-        }
-        setBreakLength((prevBreak) => prevBreak + seconds);
-      } else if (type === 'session') {
-        if (
-          (sessionLength <= 1 && seconds < 0) ||
-          (sessionLength >= 60 && seconds > 0)
-        ) {
-          return;
-        }
-        setSessionLength((prevSession) => prevSession + seconds);
-        if (!timeOn) {
-          setSessionTime((sessionLength + seconds) * 60);
-        }
+
+    if (type === 'break') {
+      if (
+        (breakLength <= 1 && seconds < 0) ||
+        (breakLength >= 60 && seconds > 0)
+      ) {
+        return;
+      }
+      setBreakLength((prevBreak) => prevBreak + seconds);
+    } else if (type === 'session') {
+      if (
+        (sessionLength <= 1 && seconds < 0) ||
+        (sessionLength >= 60 && seconds > 0)
+      ) {
+        return;
+      }
+      setSessionLength((prevSession) => prevSession + seconds);
+      if (!timeOn) {
+        setSessionTime((sessionLength + seconds) * 60);
       }
     }
   };
