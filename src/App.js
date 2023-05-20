@@ -3,7 +3,8 @@ import TimerControls from './components/TimerControls';
 import Display from './components/Display';
 import formatTime from './utils/formatTime';
 import fillTimer from './utils/animatedBar';
-import { useState, useEffect } from 'react';
+import beepSound from './assets/beep.mp3';
+import { useState, useEffect, useRef } from 'react';
 
 function App() {
   const [breakLength, setBreakLength] = useState(5);
@@ -13,11 +14,7 @@ function App() {
   const [play, setPlay] = useState(false);
   const [onBreak, setOnBreak] = useState(false);
   const [audioOn, setAudioOn] = useState(false);
-
-  const playBeepSound = () => {
-    const beepSound = new Audio('./assets/beep-sound.mp3');
-    beepSound.play();
-  };
+  const audioRef = useRef(null);
 
   const confBtn = (seconds, type) => {
     if (timeOn) {
@@ -54,6 +51,9 @@ function App() {
     setTimeOn(false);
     setPlay(false);
     setOnBreak(false);
+    setAudioOn(false);
+    audioRef.current.currentTime = 0;
+    audioRef.current.pause();
   };
 
   const countDown = () => {
@@ -77,13 +77,25 @@ function App() {
           setAudioOn(false);
           return prevTime - 1;
         });
+        if (sessionTime === 0) {
+          setAudioOn(true);
+        }
         fillTimer(sessionLength, sessionTime);
       }, 1000);
+      if (sessionTime === 0) {
+        setAudioOn(true);
+      }
     }
     return () => {
       clearInterval(timeoutId);
     };
   }, [timeOn, sessionTime]);
+
+  useEffect(() => {
+    if (audioOn) {
+      audioRef.current.play();
+    }
+  }, [audioOn]);
 
   const circleStrokeSession =
     sessionTime <= 10 && sessionTime % 2 === 0 ? '#F40000' : '#96d9ff';
@@ -129,8 +141,8 @@ function App() {
           type={'session'}
           confBtn={confBtn}
         />
-        {/* <audio id="beep"></audio> */}
       </div>
+      <audio id="beep" preload="auto" ref={audioRef} src={beepSound} />
     </div>
   );
 }
