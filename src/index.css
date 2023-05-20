@@ -201,7 +201,7 @@ button:hover{
   height: 100%;
   fill: transparent;
   stroke-width:13;
-  stroke: var(--clr-border-timer-40);
+  /* stroke: var(--clr-border-timer-40); */
   transform: translate(8px,8px);
   stroke-dasharray:692;
   /* change this dinamically 2pir=692, r=110*/

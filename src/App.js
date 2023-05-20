@@ -7,8 +7,8 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [breakLength, setBreakLength] = useState(5);
-  const [sessionLength, setSessionLength] = useState(1);
-  const [sessionTime, setSessionTime] = useState(1 * 60);
+  const [sessionLength, setSessionLength] = useState(0.25);
+  const [sessionTime, setSessionTime] = useState(0.25 * 60);
   const [timeOn, setTimeOn] = useState(false);
   const [play, setPlay] = useState(false);
 
@@ -62,6 +62,9 @@ function App() {
     };
   }, [timeOn, sessionTime]);
 
+  const circleStroke =
+    sessionTime <= 10 && sessionTime % 2 === 0 ? '#F40000' : '#96d9ff';
+
   return (
     <div className="container">
       <div className="clock-wrapper">
@@ -78,7 +81,14 @@ function App() {
         <div className="display-wrapper">
           <div className="dot"></div>
           <svg>
-            <circle cx="110" cy="110" r="110" id="circle-svg"></circle>
+            <circle
+              cx="110"
+              cy="110"
+              r="110"
+              id="circle-svg"
+              stroke={circleStroke}
+              fill="transparent"
+            ></circle>
           </svg>
           <Display sessionTime={formatTime(sessionTime)} />
           <TimerControls countDown={countDown} play={play} reset={reset} />
