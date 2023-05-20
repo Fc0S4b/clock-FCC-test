@@ -7,30 +7,42 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [breakLength, setBreakLength] = useState(5);
-  const [sessionLength, setSessionLength] = useState(0.25);
-  const [sessionTime, setSessionTime] = useState(0.25 * 60);
+  const [sessionLength, setSessionLength] = useState(25);
+  const [sessionTime, setSessionTime] = useState(25 * 60);
   const [timeOn, setTimeOn] = useState(false);
   const [play, setPlay] = useState(false);
+  const [onBreak, setOnBreak] = useState(false);
+  const [audioOn, setAudioOn] = useState(false);
+
+  const playBeepSound = () => {
+    const beepSound = new Audio('./assets/beep-sound.mp3');
+    beepSound.play();
+  };
 
   const confBtn = (seconds, type) => {
-    if (type === 'break') {
-      if (
-        (breakLength < 1 && seconds < 0) ||
-        (breakLength >= 60 && seconds > 0)
-      ) {
-        return;
-      }
-      setBreakLength((prevBreak) => prevBreak + seconds);
-    } else if (type === 'session') {
-      if (
-        (sessionLength < 1 && seconds < 0) ||
-        (sessionLength >= 60 && seconds > 0)
-      ) {
-        return;
-      }
-      setSessionLength((prevSession) => prevSession + seconds);
-      if (!timeOn) {
-        setSessionTime((sessionLength + seconds) * 60);
+    if (timeOn) {
+      return;
+    }
+    {
+      if (type === 'break') {
+        if (
+          (breakLength <= 1 && seconds < 0) ||
+          (breakLength >= 60 && seconds > 0)
+        ) {
+          return;
+        }
+        setBreakLength((prevBreak) => prevBreak + seconds);
+      } else if (type === 'session') {
+        if (
+          (sessionLength <= 1 && seconds < 0) ||
+          (sessionLength >= 60 && seconds > 0)
+        ) {
+          return;
+        }
+        setSessionLength((prevSession) => prevSession + seconds);
+        if (!timeOn) {
+          setSessionTime((sessionLength + seconds) * 60);
+        }
       }
     }
   };
@@ -41,6 +53,7 @@ function App() {
     setSessionTime(25 * 60);
     setTimeOn(false);
     setPlay(false);
+    setOnBreak(false);
   };
 
   const countDown = () => {
@@ -51,9 +64,19 @@ function App() {
   useEffect(() => {
     let timeoutId;
 
-    if (timeOn && sessionTime > 0) {
+    if (timeOn && sessionTime >= 0) {
       timeoutId = setTimeout(() => {
-        setSessionTime((prevTime) => prevTime - 1);
+        setSessionTime((prevTime) => {
+          if (prevTime <= 0 && !onBreak) {
+            setOnBreak(true);
+            return breakLength * 60;
+          } else if (prevTime <= 0 && onBreak) {
+            setOnBreak(false);
+            return sessionLength * 60;
+          }
+          setAudioOn(false);
+          return prevTime - 1;
+        });
         fillTimer(sessionLength, sessionTime);
       }, 1000);
     }
@@ -62,8 +85,11 @@ function App() {
     };
   }, [timeOn, sessionTime]);
 
-  const circleStroke =
+  const circleStrokeSession =
     sessionTime <= 10 && sessionTime % 2 === 0 ? '#F40000' : '#96d9ff';
+
+  const circleStrokeBreak =
+    sessionTime <= 10 && sessionTime % 2 === 0 ? '#F40000' : '#D6D84F';
 
   return (
     <div className="container">
@@ -86,11 +112,11 @@ function App() {
               cy="110"
               r="110"
               id="circle-svg"
-              stroke={circleStroke}
+              stroke={!onBreak ? circleStrokeSession : circleStrokeBreak}
               fill="transparent"
             ></circle>
           </svg>
-          <Display sessionTime={formatTime(sessionTime)} />
+          <Display onBreak={onBreak} sessionTime={formatTime(sessionTime)} />
           <TimerControls countDown={countDown} play={play} reset={reset} />
         </div>
         <TimerConf
